@@ -43,6 +43,7 @@
     <div class="container">
         <h2>Mark Attendance</h2>
         <form id="attendanceForm">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
             <div class="form-group">
                 <label for="date">Date:</label>
                 <input type="date" id="date" name="date" required>
@@ -57,23 +58,39 @@
             <input type="submit" value="Mark Attendance">
         </form>
     </div>
-
+    
     <script>
-        // Form submission
-        document.getElementById("attendanceForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            // Add your AJAX code to submit the form data and handle the response here
-            // Example:
-            // var formData = new FormData(this);
-            // fetch('submit_attendance.php', {
-            //     method: 'POST',
-            //     body: formData
-            // })
-            // .then(response => response.json())
-            // .then(data => {
-            //     // Handle response
-            // })
-            // .catch(error => console.error('Error:', error));
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date();
+            var offset = today.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
+            var localISODate = new Date(today.getTime() - offset).toISOString().split('T')[0];
+            
+            document.getElementById('date').value = localISODate; // Sets the input field's value to today's date
+            document.getElementById('date').setAttribute('min', localISODate);
+            document.getElementById('date').setAttribute('max', localISODate);
+        });
+
+        document.getElementById('attendanceForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            var formData = new FormData(this);
+
+            // Send AJAX request to Django view
+            fetch('/markattendance/', {  // Ensure this URL is correct based on your Django URL configuration
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);  // Show success message
+                }
+                this.reset();  // Optionally, reset the form
+            })
+            .catch(error => {
+                alert('Error: ' + error.message);  // Show error message
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
