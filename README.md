@@ -5,7 +5,7 @@ git@github.com:Offerpedia/task-attendance-system.git
 This project is a basic attendance system built using Django. It allows for the management of two types of users: administrators and employees. Administrators have the ability to add employees to the system, while employees can mark their attendance with a time in and time out, but only once per day. Employees can only view their own attendance records, while administrators have the ability to approve attendance records.
 
 ## Installation
-1. Clone the repository: `git@github.com:Offerpedia/task-attendance-system.git`
+1. Clone the repository: `Offerpedia/task-attendance-system.git`
 2. Navigate to the project directory: `cd attendance`
 3. Create a virtual environment (optional but recommended): `python3 -m venv venv`
 4. Activate the virtual environment:
