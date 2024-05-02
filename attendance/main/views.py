@@ -31,7 +31,7 @@ def login(request):
             elif hasattr(user, 'employee'):  # Check if user is linked to an employee
                 return redirect('markattendance')  # Redirect employee to markattendance.html
             else:
-                return redirect('some_other_view')  # Redirect for users who are neither
+                return redirect('markattendance')  # Redirect for users who are neither
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials'})
     return render(request, 'main/login.html')
@@ -49,6 +49,7 @@ def register(request):
     return render(request, 'main/register.html', {'form': form})
 
 @csrf_exempt  # Temporarily disable CSRF for this view, ideally use the CSRF token
+
 def update_attendance(request):
     try:
         data = json.loads(request.body)  # Parse JSON data from the request body
@@ -66,6 +67,7 @@ def update_attendance(request):
     except Exception as e:
         print("Exception", str(e))  # Printing the exception to the console for debugging
         return JsonResponse({'error': str(e)}, status=500)
+    
 def attendance(request):
     # Fetch all attendance records
     all_attendance_records = Attendance.objects.select_related('employee').order_by('-date')
